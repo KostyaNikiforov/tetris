@@ -3,6 +3,7 @@ import java.awt.*;
 
 public class Window {
     public KeyboardListener keyboardListener = new KeyboardListener();
+    public ButtonListener buttonListener = new ButtonListener();
     public JFrame window = new JFrame("Canvas Example");
     public GameCanvas gameCanvas = new GameCanvas();
     public JButton restartButton = new JButton();
@@ -24,6 +25,7 @@ public class Window {
         restartButton.setBounds(30, 280, 90, 40);
         restartButton.setText("Restart");
         restartButton.setActionCommand("restart");
+        restartButton.addActionListener(buttonListener);
     }
 
     public void addElements() {

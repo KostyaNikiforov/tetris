@@ -1,7 +1,6 @@
 package models;
 
 import models.enums.CellType;
-import models.fields.Vector;
 
 public class Game {
     public static final int CANVAS_HEIGHT = 400; // px
@@ -21,10 +20,7 @@ public class Game {
 
     public static Cell[][] field = new Cell[X_BLOCK_NUMBER][Y_BLOCK_NUMBER + SUBSPACE];
 
-    public static Block fallingBlockNow;
-    public static Vector cell1;
-    public static Vector cell2;
-    public static Vector cell3;
+    public static Block blockNow;
 
     public static int getSpeed(){
         return (int) (1000 / FPS);
@@ -50,7 +46,7 @@ public class Game {
     }
 
     public static void step(){
-        System.out.println("STEP");
+        // System.out.println("STEP");
         for (int x = 0; x < Game.X_BLOCK_NUMBER; x++) {
             for (int y = 0; y < Game.Y_BLOCK_NUMBER + Game.SUBSPACE; y++){
                 if (Game.field[x][y].type == CellType.MAIN) {
@@ -59,9 +55,9 @@ public class Game {
                         displayBlock(x, y + 1);
                     } else {
                         field[x][y].type = CellType.STANDING;
-                        field[x + cell1.getX()][y + cell1.getY()].type = CellType.STANDING;
-                        field[x + cell2.getX()][y + cell2.getY()].type = CellType.STANDING;
-                        field[x + cell3.getX()][y + cell3.getY()].type = CellType.STANDING;
+                        field[x + blockNow.getX(0)][y + blockNow.getY(0)].type = CellType.STANDING;
+                        field[x + blockNow.getX(1)][y + blockNow.getY(1)].type = CellType.STANDING;
+                        field[x + blockNow.getX(2)][y + blockNow.getY(2)].type = CellType.STANDING;
                         createNewBlock();
                     }
                     return;
@@ -71,24 +67,21 @@ public class Game {
     }
 
     public static void displayBlock(int x, int y){
-        System.out.println("RENDERING BLOCK");
+        // System.out.println("RENDERING BLOCK");
 
         field[x][y].type = CellType.MAIN;
-        field[x + cell1.getX()][y + cell1.getY()].type = CellType.FALLING;
-        field[x + cell2.getX()][y + cell2.getY()].type = CellType.FALLING;
-        field[x + cell3.getX()][y + cell3.getY()].type = CellType.FALLING;
+        field[x + blockNow.getX(0)][y + blockNow.getY(0)].type = CellType.FALLING;
+        field[x + blockNow.getX(1)][y + blockNow.getY(1)].type = CellType.FALLING;
+        field[x + blockNow.getX(2)][y + blockNow.getY(2)].type = CellType.FALLING;
 
     }
 
     public static void createNewBlock(){
         System.out.println("CREATING NEW BLOCK");
 
-        fallingBlockNow = new Block();
-        cell1 = fallingBlockNow.type.getCELL1();
-        cell2 = fallingBlockNow.type.getCELL2();
-        cell3 = fallingBlockNow.type.getCELL3();
+        blockNow = new Block();
 
-        System.out.println(fallingBlockNow.type.name());
+        System.out.println(blockNow.type.name());
         field[X_SPAWN_POINT][Y_SPAWN_POINT].type = CellType.MAIN;
 
     }
@@ -105,12 +98,12 @@ public class Game {
 
     public static boolean verticalСollisionCheck(int main_x, int main_y, int move){
 
-        if ((main_y + cell3.getY() + move < Y_BLOCK_NUMBER + SUBSPACE) &&
-                (main_y + cell2.getY() + move < Y_BLOCK_NUMBER + SUBSPACE) &&
-                (main_y + cell1.getY() + move< Y_BLOCK_NUMBER + SUBSPACE) &&
-                (field[main_x + cell1.getX()][main_y + cell1.getY() + move].type != CellType.STANDING) &&
-                (field[main_x + cell2.getX()][main_y + cell2.getY() + move].type != CellType.STANDING) &&
-                (field[main_x + cell3.getX()][main_y + cell3.getY() + move].type != CellType.STANDING)) {
+        if ((main_y + blockNow.getY(2) + move < Y_BLOCK_NUMBER + SUBSPACE) &&
+                (main_y + blockNow.getY(1) + move < Y_BLOCK_NUMBER + SUBSPACE) &&
+                (main_y + blockNow.getY(0) + move< Y_BLOCK_NUMBER + SUBSPACE) &&
+                (field[main_x + blockNow.getX(0)][main_y + blockNow.getY(0) + move].type != CellType.STANDING) &&
+                (field[main_x + blockNow.getX(1)][main_y + blockNow.getY(1) + move].type != CellType.STANDING) &&
+                (field[main_x + blockNow.getX(2)][main_y + blockNow.getY(2) + move].type != CellType.STANDING)) {
             return false;
         } else {
             return true;
@@ -119,17 +112,17 @@ public class Game {
     public static boolean horizontalСollisionCheck(int x, int y, int move){
         if (
                 (x + move < X_BLOCK_NUMBER) &&
-                (x + cell3.getX() + move < X_BLOCK_NUMBER) &&
-                (x + cell2.getX() + move < X_BLOCK_NUMBER) &&
-                (x + cell1.getX() +move < X_BLOCK_NUMBER) &&
+                (x + blockNow.getX(2) + move < X_BLOCK_NUMBER) &&
+                (x + blockNow.getX(1) + move < X_BLOCK_NUMBER) &&
+                (x + blockNow.getX(0) +move < X_BLOCK_NUMBER) &&
                 (x + move > -1) &&
-                (x + cell3.getX() + move > -1) &&
-                (x + cell2.getX() + move > -1) &&
-                (x + cell1.getX() +move > -1) &&
-                (field[x + move][y + cell1.getY()].type != CellType.STANDING) &&
-                (field[x + cell1.getX() + move][y + cell1.getY()].type != CellType.STANDING) &&
-                (field[x + cell2.getX() + move][y + cell2.getY()].type != CellType.STANDING) &&
-                (field[x + cell3.getX() + move][y + cell3.getY()].type != CellType.STANDING))
+                (x + blockNow.getX(2) + move > -1) &&
+                (x + blockNow.getX(1) + move > -1) &&
+                (x + blockNow.getX(0) +move > -1) &&
+                (field[x + move][y + blockNow.getY(1)].type != CellType.STANDING) &&
+                (field[x + blockNow.getX(0) + move][y + blockNow.getY(0)].type != CellType.STANDING) &&
+                (field[x + blockNow.getX(1) + move][y + blockNow.getY(1)].type != CellType.STANDING) &&
+                (field[x + blockNow.getX(2) + move][y + blockNow.getY(2)].type != CellType.STANDING))
         {
             return false;
         } else {
@@ -151,6 +144,12 @@ public class Game {
                 }
             }
         }
+    }
+
+
+    public static void turnBlock(){
+        Game.turnBlock();
+
     }
 
 }
