@@ -10,7 +10,9 @@ public class Window {
     public ButtonListener buttonListener = new ButtonListener();
     public JFrame window = new JFrame("Canvas Example");
     public GameCanvas gameCanvas = new GameCanvas();
+
     public JButton restartButton = new JButton();
+    public JButton pauseButton = new JButton();
 
     public Window() {
         // creating a frame
@@ -30,6 +32,11 @@ public class Window {
         restartButton.setText("Restart");
         restartButton.setActionCommand("restart");
         restartButton.addActionListener(buttonListener);
+
+        pauseButton.setBounds(30, 200, 90, 40);
+        pauseButton.setText("Pause");
+        pauseButton.setActionCommand("pause");
+        pauseButton.addActionListener(buttonListener);
     }
 
     public void addElements() {
@@ -37,6 +44,7 @@ public class Window {
         gameCanvas.addKeyListener(keyboardListener);
         window.add(gameCanvas);
         window.getContentPane().add(restartButton, BorderLayout.CENTER);
+        window.getContentPane().add(pauseButton, BorderLayout.CENTER);
     }
 
 }

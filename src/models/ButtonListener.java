@@ -8,6 +8,9 @@ import java.awt.event.ActionListener;
 public class ButtonListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
-        Game.restart();
+        switch (e.getActionCommand()){
+            case "restart": Game.restart(); break;
+            case "pause": Game.pause(); break;
+        }
     }
 }

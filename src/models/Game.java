@@ -87,11 +87,19 @@ public class Game {
     public static void stop(){
         play = false;
     }
+    public static void start(){
+        play = false;
+    }
+    public static void pause(){
+        play = !play;
+    }
+
+
 
     public static void restart(){
-        play = true;
         fillUpField();
         createNewBlock();
+        start();
     }
 
     public static boolean verticalСollisionCheck(int x, int y, int move){
