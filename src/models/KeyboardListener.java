@@ -1,3 +1,4 @@
+package models;
 
 import models.Game;
 import models.enums.CellType;
@@ -18,7 +19,7 @@ public class KeyboardListener implements KeyListener {
             case 37: Game.moveBlock((byte) -1); break;
             case 39: Game.moveBlock((byte) 1); break;
             case 32: Game.turnBlock(); break;
-            case 40: Game.FPS = 10; break;
+            case 40: Game.FPS = 20; break;
         }
     }
 

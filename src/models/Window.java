@@ -1,3 +1,7 @@
+package models;
+
+import models.GameCanvas;
+
 import javax.swing.*;
 import java.awt.*;
 

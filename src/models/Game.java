@@ -3,6 +3,8 @@ package models;
 import models.enums.CellType;
 
 public class Game {
+    public static Window window = new Window();
+
     public static final int CANVAS_HEIGHT = 400; // px
     public static final int CANVAS_WIDTH = 200; // px
 
@@ -19,10 +21,11 @@ public class Game {
     public static int SUBSPACE = 5; // Blocks
 
     public static Cell[][] field = new Cell[X_BLOCK_NUMBER][Y_BLOCK_NUMBER + SUBSPACE];
-    public static int mainYNow;
-    public static int mainXNow;
+
 
     public static Block blockNow;
+    public static int mainYNow;
+    public static int mainXNow;
 
     public static int getSpeed(){
         return (int) (1000 / FPS);
@@ -48,12 +51,12 @@ public class Game {
     }
 
     public static void step(){
-        // System.out.println("STEP");
         cleanUpField();
         if (!verticalСollisionCheck(mainXNow, mainYNow, 1)) {
             mainYNow++;
             displayBlock(mainXNow, mainYNow);
         } else {
+
             field[mainXNow][mainYNow].type = CellType.STANDING;
             field[mainXNow + blockNow.getX(0)][mainYNow + blockNow.getY(0)].type = CellType.STANDING;
             field[mainXNow + blockNow.getX(1)][mainYNow + blockNow.getY(1)].type = CellType.STANDING;
@@ -66,9 +69,8 @@ public class Game {
     }
 
     public static void displayBlock(int x, int y){
-        // System.out.println("RENDERING BLOCK");
 
-        field[x][y].type = CellType.MAIN;
+        field[x][y].type = CellType.FALLING;
         field[x + blockNow.getX(0)][y + blockNow.getY(0)].type = CellType.FALLING;
         field[x + blockNow.getX(1)][y + blockNow.getY(1)].type = CellType.FALLING;
         field[x + blockNow.getX(2)][y + blockNow.getY(2)].type = CellType.FALLING;
@@ -76,15 +78,10 @@ public class Game {
     }
 
     public static void createNewBlock(){
-        System.out.println("CREATING NEW BLOCK");
-
         blockNow = new Block();
 
-        System.out.println(blockNow.type.name());
-        field[X_SPAWN_POINT][Y_SPAWN_POINT].type = CellType.MAIN;
         mainXNow = X_SPAWN_POINT;
         mainYNow = Y_SPAWN_POINT;
-
     }
 
     public static void stop(){
@@ -97,14 +94,16 @@ public class Game {
         createNewBlock();
     }
 
-    public static boolean verticalСollisionCheck(int main_x, int main_y, int move){
-
-        if ((main_y + blockNow.getY(2) + move < Y_BLOCK_NUMBER + SUBSPACE) &&
-                (main_y + blockNow.getY(1) + move < Y_BLOCK_NUMBER + SUBSPACE) &&
-                (main_y + blockNow.getY(0) + move< Y_BLOCK_NUMBER + SUBSPACE) &&
-                (field[main_x + blockNow.getX(0)][main_y + blockNow.getY(0) + move].type != CellType.STANDING) &&
-                (field[main_x + blockNow.getX(1)][main_y + blockNow.getY(1) + move].type != CellType.STANDING) &&
-                (field[main_x + blockNow.getX(2)][main_y + blockNow.getY(2) + move].type != CellType.STANDING)) {
+    public static boolean verticalСollisionCheck(int x, int y, int move){
+        if (
+                (y + blockNow.getY(2) + move < Y_BLOCK_NUMBER + SUBSPACE) &&
+                (y + blockNow.getY(1) + move < Y_BLOCK_NUMBER + SUBSPACE) &&
+                (y + blockNow.getY(0) + move< Y_BLOCK_NUMBER + SUBSPACE) &&
+                (field[x][y + move].type != CellType.STANDING) &&
+                (field[x + blockNow.getX(0)][y + blockNow.getY(0) + move].type != CellType.STANDING) &&
+                (field[x + blockNow.getX(1)][y + blockNow.getY(1) + move].type != CellType.STANDING) &&
+                (field[x + blockNow.getX(2)][y + blockNow.getY(2) + move].type != CellType.STANDING))
+        {
             return false;
         } else {
             return true;
@@ -119,8 +118,8 @@ public class Game {
                 (x + move > -1) &&
                 (x + blockNow.getX(2) + move > -1) &&
                 (x + blockNow.getX(1) + move > -1) &&
-                (x + blockNow.getX(0) +move > -1) &&
-                (field[x + move][y + blockNow.getY(1)].type != CellType.STANDING) &&
+                (x + blockNow.getX(0) + move > -1) &&
+                (field[x + move][y].type != CellType.STANDING) &&
                 (field[x + blockNow.getX(0) + move][y + blockNow.getY(0)].type != CellType.STANDING) &&
                 (field[x + blockNow.getX(1) + move][y + blockNow.getY(1)].type != CellType.STANDING) &&
                 (field[x + blockNow.getX(2) + move][y + blockNow.getY(2)].type != CellType.STANDING))
@@ -133,11 +132,11 @@ public class Game {
 
     public static void moveBlock(byte move){
         if (!horizontalСollisionCheck(mainXNow, mainYNow, move)) {
-            System.out.println("MOVING - " + move);
             cleanUpField();
             mainXNow += move;
             displayBlock(mainXNow, mainYNow);
-            return;
+
+            update();
         }
     }
 
@@ -149,6 +148,7 @@ public class Game {
             cleanUpField();
 
             displayBlock(mainXNow, mainYNow);
+            update();
         } else {
             blockNow.changeRotation(-1);
         }
@@ -174,5 +174,29 @@ public class Game {
                 }
             }
         }
+
     }
+
+
+    public static void update() {
+        // Clearing canvas
+        Game.window.gameCanvas.update(Game.window.gameCanvas.getGraphics());
+
+        // Drawing black cell
+        for (int x = 0; x < Game.X_BLOCK_NUMBER; x++) {
+            for (int y = Game.SUBSPACE; y < Game.Y_BLOCK_NUMBER + Game.SUBSPACE; y++){
+                // GAME OVER CHECK
+                if (y == Game.SUBSPACE && Game.field[x][y].type == CellType.STANDING) {
+                    Game.restart();
+                    break;
+                }
+                if (Game.field[x][y].type != CellType.EMPTY) {
+                    window.gameCanvas.drawBlock(x, y);
+                }
+
+            }
+        }
+
+    }
+
 }

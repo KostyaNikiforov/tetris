@@ -1,10 +1,12 @@
+package models;
+
 import java.awt.*;
 import models.Cell;
 import models.Game;
 
 // class which inherits the Canvas class
 // to create Canvas
-class GameCanvas extends Canvas {
+public class GameCanvas extends Canvas {
 
     // class constructor
     public GameCanvas() {

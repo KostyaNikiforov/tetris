@@ -1,3 +1,5 @@
+package models;
+
 import models.Game;
 
 import java.awt.event.ActionEvent;
