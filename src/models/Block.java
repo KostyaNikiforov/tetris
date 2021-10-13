@@ -71,4 +71,14 @@ public class Block {
         }
         this.rotation = Rotation.values()[newRotationNumber];
     }
+
+    public void changeRotation(int dir){
+        int newRotationNumber = this.rotation.getNumber() + dir;
+        if (newRotationNumber > 3) {
+            newRotationNumber = 0;
+        } else if (newRotationNumber < 0) {
+            newRotationNumber = 3;
+        }
+        this.rotation = Rotation.values()[newRotationNumber];
+    }
 }
