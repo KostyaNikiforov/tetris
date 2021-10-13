@@ -88,7 +88,7 @@ public class Game {
         play = false;
     }
     public static void start(){
-        play = false;
+        play = true;
     }
     public static void pause(){
         play = !play;
