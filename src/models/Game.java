@@ -41,7 +41,7 @@ public class Game {
         for (int x = 0; x < Game.X_BLOCK_NUMBER; x++) {
             for (int y = 0; y < Game.Y_BLOCK_NUMBER + Game.SUBSPACE; y++){
                 if (Game.field[x][y].type != CellType.STANDING){
-                    Game.field[x][y] = new Cell();
+                    Game.field[x][y].type = CellType.EMPTY;
                 }
             }
         }
@@ -58,7 +58,9 @@ public class Game {
             field[mainXNow + blockNow.getX(0)][mainYNow + blockNow.getY(0)].type = CellType.STANDING;
             field[mainXNow + blockNow.getX(1)][mainYNow + blockNow.getY(1)].type = CellType.STANDING;
             field[mainXNow + blockNow.getX(2)][mainYNow + blockNow.getY(2)].type = CellType.STANDING;
-            // checkFullLine();
+
+            removeFullLine();
+
             createNewBlock();
         }
     }
@@ -152,4 +154,25 @@ public class Game {
         }
     }
 
+    public static void removeFullLine(){
+        System.out.println("FULL LINE CHECKING");
+
+        for (int y = 0; y < Game.Y_BLOCK_NUMBER + Game.SUBSPACE; y++) {
+            boolean fullLine = true;
+            for (int x = 0; x < Game.X_BLOCK_NUMBER; x++){
+                if (Game.field[x][y].type != CellType.STANDING) {
+                    fullLine = false;
+                    break;
+                }
+            }
+            if (fullLine) {
+                System.out.println("FULL LINE WAS FOUND.");
+                for (int sy = y; sy > 0 + Game.SUBSPACE; sy--) {
+                    for (int x = 0; x < Game.X_BLOCK_NUMBER; x++) {
+                        Game.field[x][sy].type = Game.field[x][sy - 1].type;
+                    }
+                }
+            }
+        }
+    }
 }
