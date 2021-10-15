@@ -105,6 +105,7 @@ public class Game {
     public static void restart(){
         fillUpField();
         createNewBlock();
+        nullifyGameRate();
         start();
     }
 
@@ -226,6 +227,15 @@ public class Game {
         gameLevel = Math.round(gameScore / 20000);
 
         // Speed up the game
+        FPS = gameLevel + 1;
+
+        window.setGameScore(gameScore);
+        window.setGameLevel(gameLevel);
+    }
+
+    public static void nullifyGameRate(){
+        gameLevel = 0;
+        gameScore = 0;
         FPS = gameLevel + 1;
 
         window.setGameScore(gameScore);
