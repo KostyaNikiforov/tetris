@@ -1,12 +1,12 @@
 package models.enums;
 
 public enum BlockType {
-    SQUARE(0),
-    STRAIGHT(1),
-    CURVE_LEFT(2),
-    CURVE_RIGHT(3),
-    CORNER_LEFT(4),
-    CORNER_RIGHT(5);
+    O(0),
+    I(1),
+    Z(2),
+    S(3),
+    L(4),
+    J(5);
 
     private int number;
 

@@ -8,8 +8,9 @@ public class GameLoop {
         Game.createNewBlock();
 
         while (true) {
-            Thread.sleep(Game.getSpeed());
-            if (Game.play) {
+            Thread.sleep(1000);
+            while (Game.play) {
+                Thread.sleep(Game.getSpeed());
                 Game.step();
                 Game.update();
             }

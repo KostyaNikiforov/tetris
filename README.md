@@ -2,4 +2,4 @@
 - Simple GUI java application.
 - Classic Tetris game.
 - Kostynchik's addiction.
-- Version - 0.1
+- Version - 0.6

@@ -1,5 +1,6 @@
 package models;
 
+import com.sun.tools.javac.Main;
 import models.enums.CellType;
 
 public class Game {
@@ -8,19 +9,22 @@ public class Game {
     public static final int CANVAS_HEIGHT = 400; // px
     public static final int CANVAS_WIDTH = 200; // px
 
-    public static final int X_BLOCK_NUMBER = 9; // Blocks
-    public static final int Y_BLOCK_NUMBER = 18; // Blocks
+    public static final int X_BLOCK_NUMBER = 10; // Blocks
+    public static final int Y_BLOCK_NUMBER = 20; // Blocks
 
     public static final int X_SPAWN_POINT = X_BLOCK_NUMBER / 2;
     public static final int Y_SPAWN_POINT = 3;
 
-    public static double FPS = 4; // Blocks per second
+    public static double FPS = 2; // Blocks per second
 
     public static boolean play = true;
 
     public static int SUBSPACE = 5; // Blocks
 
     public static Cell[][] field = new Cell[X_BLOCK_NUMBER][Y_BLOCK_NUMBER + SUBSPACE];
+
+    private static int gameLevel = 1;
+    private static int gameScore = 0;
 
 
     public static Block blockNow;
@@ -62,8 +66,10 @@ public class Game {
             field[mainXNow + blockNow.getX(1)][mainYNow + blockNow.getY(1)].type = CellType.STANDING;
             field[mainXNow + blockNow.getX(2)][mainYNow + blockNow.getY(2)].type = CellType.STANDING;
 
-            removeFullLine();
-
+            int fullLinesNumber = removeFullLine();
+            if (fullLinesNumber > 0) {
+                updateGameRate(fullLinesNumber);
+            }
             createNewBlock();
         }
     }
@@ -162,8 +168,9 @@ public class Game {
         }
     }
 
-    public static void removeFullLine(){
+    public static int removeFullLine(){
         System.out.println("FULL LINE CHECKING");
+        int fullLinesNumber = 0;
 
         for (int y = 0; y < Game.Y_BLOCK_NUMBER + Game.SUBSPACE; y++) {
             boolean fullLine = true;
@@ -174,6 +181,7 @@ public class Game {
                 }
             }
             if (fullLine) {
+                fullLinesNumber++;
                 System.out.println("FULL LINE WAS FOUND.");
                 for (int sy = y; sy > 0 + Game.SUBSPACE; sy--) {
                     for (int x = 0; x < Game.X_BLOCK_NUMBER; x++) {
@@ -182,7 +190,7 @@ public class Game {
                 }
             }
         }
-
+        return fullLinesNumber;
     }
 
 
@@ -205,6 +213,23 @@ public class Game {
             }
         }
 
+    }
+
+    public static void updateGameRate(int fullLinesNumber){
+        switch (fullLinesNumber){
+            case 1: gameScore += 100; break;
+            case 2: gameScore += 300; break;
+            case 3: gameScore += 700; break;
+            case 4: gameScore += 1500; break;
+            default: break;
+        }
+        gameLevel = Math.round(gameScore / 20000);
+
+        // Speed up the game
+        FPS = gameLevel + 1;
+
+        window.setGameScore(gameScore);
+        window.setGameLevel(gameLevel);
     }
 
 }
