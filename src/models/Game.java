@@ -1,6 +1,5 @@
 package models;
 
-import com.sun.tools.javac.Main;
 import models.enums.CellType;
 
 public class Game {
@@ -13,7 +12,7 @@ public class Game {
     public static final int Y_BLOCK_NUMBER = 20; // Blocks
 
     public static final int X_SPAWN_POINT = X_BLOCK_NUMBER / 2;
-    public static final int Y_SPAWN_POINT = 3;
+    public static final int Y_SPAWN_POINT = 4;
 
     public static double FPS = 2; // Blocks per second
 
@@ -100,8 +99,6 @@ public class Game {
         play = !play;
     }
 
-
-
     public static void restart(){
         fillUpField();
         createNewBlock();
@@ -120,10 +117,10 @@ public class Game {
                 (field[x + blockNow.getX(2)][y + blockNow.getY(2) + move].type != CellType.STANDING))
         {
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
+
     public static boolean horizontalСollisionCheck(int x, int y, int move){
         if (
                 (x + move < X_BLOCK_NUMBER) &&
@@ -140,12 +137,11 @@ public class Game {
                 (field[x + blockNow.getX(2) + move][y + blockNow.getY(2)].type != CellType.STANDING))
         {
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
 
-    public static void moveBlock(byte move){
+    public static void moveBlock(int move){
         if (!horizontalСollisionCheck(mainXNow, mainYNow, move)) {
             cleanUpField();
             mainXNow += move;
@@ -155,11 +151,10 @@ public class Game {
         }
     }
 
-
     public static void turnBlock(){
         blockNow.changeRotation();
-        if (!horizontalСollisionCheck(mainXNow, mainYNow, 0) && !verticalСollisionCheck(mainXNow, mainYNow, 1)) {
-            System.out.println("TURNING BLOCK");
+        if (!horizontalСollisionCheck(mainXNow, mainYNow, 0)
+                && !verticalСollisionCheck(mainXNow, mainYNow, 1)) {
             cleanUpField();
 
             displayBlock(mainXNow, mainYNow);
@@ -170,9 +165,7 @@ public class Game {
     }
 
     public static int removeFullLine(){
-        System.out.println("FULL LINE CHECKING");
         int fullLinesNumber = 0;
-
         for (int y = 0; y < Game.Y_BLOCK_NUMBER + Game.SUBSPACE; y++) {
             boolean fullLine = true;
             for (int x = 0; x < Game.X_BLOCK_NUMBER; x++){
@@ -183,7 +176,6 @@ public class Game {
             }
             if (fullLine) {
                 fullLinesNumber++;
-                System.out.println("FULL LINE WAS FOUND.");
                 for (int sy = y; sy > 0 + Game.SUBSPACE; sy--) {
                     for (int x = 0; x < Game.X_BLOCK_NUMBER; x++) {
                         Game.field[x][sy].type = Game.field[x][sy - 1].type;
@@ -194,15 +186,10 @@ public class Game {
         return fullLinesNumber;
     }
 
-
     public static void update() {
-        // Clearing canvas
         Game.window.gameCanvas.update(Game.window.gameCanvas.getGraphics());
-
-        // Drawing black cell
         for (int x = 0; x < Game.X_BLOCK_NUMBER; x++) {
             for (int y = Game.SUBSPACE; y < Game.Y_BLOCK_NUMBER + Game.SUBSPACE; y++){
-                // GAME OVER CHECK
                 if (y == Game.SUBSPACE && Game.field[x][y].type == CellType.STANDING) {
                     Game.restart();
                     break;
@@ -210,10 +197,8 @@ public class Game {
                 if (Game.field[x][y].type != CellType.EMPTY) {
                     window.gameCanvas.drawBlock(x, y);
                 }
-
             }
         }
-
     }
 
     public static void updateGameRate(int fullLinesNumber){
@@ -224,11 +209,8 @@ public class Game {
             case 4: gameScore += 1500; break;
             default: break;
         }
-        gameLevel = Math.round(gameScore / 20000);
-
-        // Speed up the game
+        gameLevel = Math.round(gameScore / 20_000);
         FPS = gameLevel + 1;
-
         window.setGameScore(gameScore);
         window.setGameLevel(gameLevel);
     }
@@ -237,7 +219,6 @@ public class Game {
         gameLevel = 0;
         gameScore = 0;
         FPS = gameLevel + 1;
-
         window.setGameScore(gameScore);
         window.setGameLevel(gameLevel);
     }

@@ -1,14 +1,10 @@
 package models;
 
-import java.awt.*;
-import models.Cell;
-import models.Game;
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Graphics;
 
-// class which inherits the Canvas class
-// to create Canvas
 public class GameCanvas extends Canvas {
-
-    // class constructor
     public GameCanvas() {
         super();
         setBackground (Color.getHSBColor(135, 49, 85));
@@ -17,7 +13,6 @@ public class GameCanvas extends Canvas {
 
     public void drawBlock(int x, int y){
         Graphics g = this.getGraphics();
-        g.fillRect(Cell.width * x, Cell.height * (y - Game.SUBSPACE), Cell.width, Cell.height);
+        g.fillRect(Cell.WIDTH * x, Cell.HEIGHT * (y - Game.SUBSPACE), Cell.WIDTH, Cell.HEIGHT);
     }
-
 }

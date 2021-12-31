@@ -1,9 +1,6 @@
 package models;
 
-import models.GameCanvas;
-
 import javax.swing.*;
-import javax.swing.event.AncestorListener;
 import java.awt.*;
 
 public class Window {
@@ -12,11 +9,11 @@ public class Window {
     public JFrame window = new JFrame("TETRIS GAME");
     public GameCanvas gameCanvas = new GameCanvas();
 
-    private ImageIcon icon = new ImageIcon("/home/archkonstantin/IdeaProjects/Tetris/res/images/icons/pause-icon.png");
-    private JLabel gameLevelText = new JLabel("Level");
-    private JLabel gameLevelValue= new JLabel("0");
-    private JLabel gameScoreText = new JLabel("Score");
-    private JLabel gameScoreValue = new JLabel("0");
+    private final ImageIcon icon = new ImageIcon("/home/archkonstantin/IdeaProjects/Tetris/res/images/icons/pause-icon.png");
+    private final JLabel gameLevelText = new JLabel("Level");
+    private final JLabel gameLevelValue= new JLabel("0");
+    private final JLabel gameScoreText = new JLabel("Score");
+    private final JLabel gameScoreValue = new JLabel("0");
 
     public JButton restartButton = new JButton();
     public JButton pauseButton = new JButton();
@@ -26,7 +23,6 @@ public class Window {
     public JPanel fieldPanel = new JPanel();
 
     public Window() {
-        // creating a frame
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setSize(400, 500);
         window.setVisible(true);
@@ -37,9 +33,6 @@ public class Window {
     }
 
     public void setElements() {
-
-
-        //Setting panels
         mainPanel.setBackground(Color.DARK_GRAY);
         mainPanel.setSize(400, 500);
 
@@ -48,13 +41,6 @@ public class Window {
         leftPanel.setBackground(Color.GRAY);
         leftPanel.setSize(100, 400);
 
-        // Setting textLabel
-        //gameLevelText.setBounds(400, 85, 100, 20);
-        //gameLevelValue.setBounds(415, 110, 100, 20);
-        //gameScoreText.setBounds(400 , 140, 100, 20);
-        //gameScoreValue.setBounds(415, 165, 100, 20);
-
-        // Setting buttons
         restartButton.setBounds(375, 280, 90, 40);
         restartButton.setText("Restart");
         restartButton.setActionCommand("restart");
@@ -67,7 +53,6 @@ public class Window {
     }
 
     public void addElements() {
-        // Adding canvas to frame
         gameCanvas.addKeyListener(keyboardListener);
         fieldPanel.add(gameCanvas);
 

@@ -1,8 +1,5 @@
 package models;
 
-import models.Game;
-import models.enums.CellType;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -14,10 +11,9 @@ public class KeyboardListener implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        System.out.println("Key "+e.getKeyCode()+" was pressed.");
         switch (e.getKeyCode()){
-            case 37: Game.moveBlock((byte) -1); break;
-            case 39: Game.moveBlock((byte) 1); break;
+            case 37: Game.moveBlock(-1); break;
+            case 39: Game.moveBlock(1); break;
             case 32: Game.turnBlock(); break;
             case 40: Game.FPS = 20; break;
         }
